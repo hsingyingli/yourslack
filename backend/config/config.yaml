@@ -1,0 +1,6 @@
+DB_USERNAME: test
+DB_PASSWORD: testsecret
+DB_TABLE: test
+DB_URL: localhost
+PORT: ":9010"
+GIN_MODE: debug
