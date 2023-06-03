@@ -1,24 +1,37 @@
 package server
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	db "github.com/hsingyingli/yourslack-backend/db/sqlc"
+	"github.com/hsingyingli/yourslack-backend/pkg/token"
+	"github.com/hsingyingli/yourslack-backend/pkg/utils"
 )
 
 type Server struct {
-	router *gin.Engine
-	store  db.Store
+	config     utils.Config
+	tokenMaker token.Maker
+	store      db.Store
+	router     *gin.Engine
 }
 
-func NewServer(store db.Store) *Server {
+func NewServer(config utils.Config, store db.Store) *Server {
 	router := gin.Default()
+	tokenMaker, err := token.NewPasetoMaker(config.SYMMETRICKEY)
 
-	server := &Server{
-		router: router,
-		store:  store,
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	server.setUpRouter()
+	server := &Server{
+		config:     config,
+		tokenMaker: tokenMaker,
+		store:      store,
+		router:     router,
+	}
+
+	server.setupRouter()
 
 	return server
 }

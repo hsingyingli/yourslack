@@ -36,6 +36,6 @@ func main() {
 	}
 
 	store := db.NewStore(conn)
-	server := server.NewServer(store)
+	server := server.NewServer(config, store)
 	log.Fatal(server.Start(config.PORT))
 }

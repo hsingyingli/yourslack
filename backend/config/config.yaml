@@ -1,6 +1,15 @@
-DB_USERNAME: test
-DB_PASSWORD: testsecret
-DB_TABLE: test
-DB_URL: localhost
-PORT: ":9010"
-GIN_MODE: debug
+# default variable for development, 
+# They will be replaced to environment variable in test mode and production mode
+name: yourslack
+version: "1.0.0"
+port: ":9010"
+access_token_duration: 1m
+refresh_token_duration: 24h
+cookie_maxage: 2592000
+db_username: test
+db_password: testsecret
+db_table: test
+db_url: localhost
+symmetrickey: VfKpAjfd2yrP8CATfiQv+bQruXheIGle
+go_mod: debug
+allow_origin: http://localhost:8080
