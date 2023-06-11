@@ -5,7 +5,7 @@ import React from "react";
 const HomePage: React.FC = () => {
   return (
     <Box>
-      This is Home page
+      This is home page
     </Box>
   )
 }

@@ -1,15 +1,13 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import HomePage from './pages/Home';
+import HomePage from './pages/HomePage';
+import SignInPage from './pages/SignInPage';
 import {RequireAuth} from './middlewares'
 
 function App() {
   return (
     <Router>
       <Routes>
-      {/*
-        <Route exact path="/login" element={<SignIn />} />
-        <Route exact path="/register" element={<Register />} />
-      */}
+        <Route path="/signin" element={<SignInPage />} />
         {/*   Protect Routes   */}
         <Route element={<RequireAuth />}>
           <Route path="/" element={<HomePage />} />

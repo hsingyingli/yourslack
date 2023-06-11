@@ -1,12 +1,10 @@
 import { useEffect, useMemo } from "react";
-//import useRefreshToken from "./useRefresh";
 import useAuth from "./useAuth";
 import axios, { CreateAxiosDefaults } from "axios";
 
 
-const useAxiosPrivate = (url: string, config: CreateAxiosDefaults ) => {
-  //const refresh = useRefreshToken();
-  const {user} = useAuth();
+const useAxiosPrivate = (config: CreateAxiosDefaults ) => {
+  const {user, refreshToken} = useAuth();
   const axiosPrivate = useMemo(() => axios.create(config), [config])
 
   useEffect(()=> {
@@ -17,7 +15,6 @@ const useAxiosPrivate = (url: string, config: CreateAxiosDefaults ) => {
         }
         return config
       }, (error) => Promise.reject(error)
-
     )
 
     const resIntercept = axiosPrivate.interceptors.response.use(
@@ -26,7 +23,7 @@ const useAxiosPrivate = (url: string, config: CreateAxiosDefaults ) => {
         const prevRequest = error?.config;
         if (error?.response?.status === 401 && !prevRequest?.sent){
           prevRequest.sent = true
-          //const newAccessToken = await refresh();
+          const newAccessToken = await refreshToken();
           prevRequest.headers[`Authorization`] = `Bearer ${newAccessToken}`
           return axiosPrivate(prevRequest)
         }
@@ -37,7 +34,7 @@ const useAxiosPrivate = (url: string, config: CreateAxiosDefaults ) => {
       axiosPrivate.interceptors.request.eject(reqIntercept)
       axiosPrivate.interceptors.response.eject(resIntercept)
     }
-  }, [user, refresh])
+  }, [user, refreshToken, axiosPrivate])
   return axiosPrivate
 }
 
