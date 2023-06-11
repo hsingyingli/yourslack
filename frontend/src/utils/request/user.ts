@@ -10,6 +10,15 @@ const refreshTokenAPI = () => {
   })
 }
 
+const signUpUserAPI = (username: string, email: string, password: string) => {
+  return axiosBase.post('/v1/user', {
+    username, email, password,
+  }, {
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: true
+    })
+}
+
 const loginUserAPI = (email: string, password: string) => {
   return axiosBase.post('/v1/user/login', {
     email,
@@ -27,6 +36,7 @@ const logoutUserAPI = async () => {
 
 export {
   refreshTokenAPI,
+  signUpUserAPI,
   loginUserAPI,
   logoutUserAPI
 }

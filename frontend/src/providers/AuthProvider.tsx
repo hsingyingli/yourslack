@@ -1,13 +1,20 @@
 import React, { useState, createContext, useEffect } from "react";
-import { Box, useToast, Spinner } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
 import {User}  from "../utils/types"
-import {loginUserAPI, logoutUserAPI, refreshTokenAPI} from "../utils/request"
+import {
+  loginUserAPI, 
+  logoutUserAPI, 
+  refreshTokenAPI,
+  signUpUserAPI,
+} from "../utils/request"
+import LoadingPage from "../components/LoadingPage";
 
 interface AuthContextInterface {
   user: User | null
   loginUser: (email: string, password: string) => Promise<boolean>
   logoutUser: () => Promise<void>
   refreshToken: () => Promise<String>
+  signUpUser: (username: string, email: string, password: string) => Promise<boolean>
 }
 
 const initContext = {
@@ -15,6 +22,7 @@ const initContext = {
   loginUser: async () => false,
   logoutUser: async () => {},
   refreshToken: async () => '',
+  signUpUser: async () => false,
 }
 
 const AuthContext = createContext<AuthContextInterface>(initContext)
@@ -27,6 +35,30 @@ const AuthProvider: React.FC<AuthProviderInterface> = ({children}) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const toast = useToast() 
+
+  const signUpUser = async (username: string, email: string, password: string) => {
+    try {
+      await signUpUserAPI(username, email, password)
+      toast({
+        title: `Create Account`,
+        status: 'success',
+        duration: 1000,
+        isClosable: true, 
+        position: 'top',
+      })
+      return true
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: `Create Account Fail!!`,
+        status: 'error',
+        duration: 1000,
+        isClosable: true, 
+        position: 'top',
+      })
+      return false
+    }
+  }
 
   const loginUser =  async (email: string, password: string) => {
     try {
@@ -105,15 +137,10 @@ const AuthProvider: React.FC<AuthProviderInterface> = ({children}) => {
   }, [])
 
   return isLoading 
-    ? <Box 
-        display='flex'
-        w='100vw' h='100vh' 
-        alignItems='center' justifyContent='center' 
-      >
-        <Spinner/>
-      </Box>  
+    ? 
+      <LoadingPage/>
     : (
-      <AuthContext.Provider value={{user, loginUser, logoutUser, refreshToken }}>
+      <AuthContext.Provider value={{user, loginUser, logoutUser, refreshToken, signUpUser }}>
         {children}
       </AuthContext.Provider>
     )
