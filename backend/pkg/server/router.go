@@ -35,7 +35,6 @@ func (server *Server) setupRouter() {
 			authorized.GET("/user/me", server.getUser)
 			// update user
 			authorized.PATCH("/user/me", server.updateUser)
-
 			// delete user
 			authorized.DELETE("/user/me", server.deleteUser)
 		}

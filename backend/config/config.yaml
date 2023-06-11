@@ -12,4 +12,4 @@ db_table: test
 db_url: localhost
 symmetrickey: VfKpAjfd2yrP8CATfiQv+bQruXheIGle
 go_mod: debug
-allow_origin: http://localhost:8080
+allow_origin: http://localhost:3000

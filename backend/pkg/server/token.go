@@ -3,6 +3,7 @@ package server
 import (
 	"database/sql"
 	"errors"
+	"log"
 	"net/http"
 	"time"
 
@@ -19,6 +20,13 @@ type renewAccessTokenResponse struct {
 
 func (server *Server) renewAccessToken(ctx *gin.Context) {
 	refreshToken, err := ctx.Cookie("refresh_token")
+	request := ctx.Request
+	log.Println(request)
+	cookies := request.Cookies()
+
+	for _, cookie := range cookies {
+		log.Println("Cookie: " + cookie.String() + "\n")
+	}
 
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, errorMsg(err))
@@ -55,11 +63,6 @@ func (server *Server) renewAccessToken(ctx *gin.Context) {
 	}
 
 	accessToken, accessPayload, err := server.tokenMaker.CreateToken(user, server.config.ACCESS_TOKEN_DURATION)
-
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorMsg(err))
-		return
-	}
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorMsg(err))

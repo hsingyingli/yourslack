@@ -2,6 +2,7 @@ package server
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 	"time"
 
@@ -219,7 +220,8 @@ func (server *Server) login(ctx *gin.Context) {
 		ExpiredAt:    accessTokenPayload.ExpiredAt,
 	}
 
-	ctx.SetSameSite(http.SameSiteNoneMode)
+	//ctx.SetSameSite(http.SameSiteNoneMode)
+	log.Println(refreshToken)
 	ctx.SetCookie("refresh_token", refreshToken, server.config.COOKIE_MAXAGE, "/", "localhost", false, true)
 	ctx.JSON(http.StatusAccepted, rsp)
 }
