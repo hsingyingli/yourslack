@@ -17,7 +17,6 @@ const SignUpPage: React.FC = () => {
     if (isError) return
 
     const isSuccess = await signUpUser(username, email, password)
-    console.log(isSuccess)
     if (isSuccess) {
       navigate('/signin')
     }
